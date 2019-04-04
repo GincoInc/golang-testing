@@ -1,16 +1,13 @@
-FROM golang:1.11.0-alpine3.7
+FROM golang:1.11
 
-LABEL maintainer="Bo-Yi Wi <appleboy.tw@gmail.com>"
+LABEL Maintainer="Morishita Masataka <masataka@ginco.io>"
 
-RUN apk update && \
-  apk upgrade --update-cache --available
-RUN apk add git make curl perl bash build-base zlib-dev ucl-dev
+RUN apt-get update \
+&& apt-get -y upgrade
 
-RUN git clone https://github.com/upx/upx.git && cd upx && \
-  git submodule update --init --recursive && \
-  make all && cp -r src/upx.out /usr/local/bin/upx
-
-RUN rm -rf /var/cache/apk/*
+RUN apt-get -y install git make curl \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 
 # install glide package management.
 RUN curl https://glide.sh/get | sh
